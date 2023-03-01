@@ -68,6 +68,6 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 POST -> [http://127.0.0.1:8000/api/obtener-texto-pdf](http://127.0.0.1:8000/api/obtener-texto-pdf)
 
 #### PARAMETROS
-- origen
-- ruta_documento
-- paginate
+- origen = ['EXTERNO', 'TRAMITES']
+- ruta_documento = ['carpeta/nombre_documento.pdf', 'nombre_documento.pdf']
+- paginate = ['true', 'false']
