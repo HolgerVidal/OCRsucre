@@ -3,31 +3,52 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Imagick;
 use Log;
 
 class OcrController extends Controller
 {
     
-    public function obtener_texto_pdf(){
+    public function obtener_texto_pdf(Request $request){
 
 		try{
 			
+            //obigen del documentos
+            //TRAMITES = el cliente tiene que guardar el documento en 'Docs' y solo recivimos el nombre | finalmente nosotros lo borramos
+            //EXTERNO = el cliente soli envia el nombre, nosotros tenemos que sacar el documento del servidor de archivos
+
+            $origen = $request->origen;
+            $ruta_documento = $request->ruta_documento;
+
+            if($origen == "EXTERNO"){
+                //obtenemos solo el nombre del documento
+                $nombre_doc = strrpos($ruta_documento, '/');
+                $nombre_doc = substr($ruta_documento, $nombre_doc+1);
+                // Descargar el archivo del disco origen
+                $descargado = Storage::disk("sftpArchivos")->get($ruta_documento);
+                // Guardar el archivo en el disco destino
+                Storage::disk("archivosLocal")->put($nombre_doc, $descargado);
+
+                $tmpFile = $nombre_doc;
+            }else{
+                $tmpFile = $ruta_documento;
+            }
+
 			$tiempo_inicial = microtime(true);
 			$paginate = false;
-			if(isset($_REQUEST['paginate'])){
-				if($_REQUEST['paginate']=='true'){
+			if(isset($request->paginate)){
+				if($request->paginate=='true'){
 					$paginate = true;
 				}
 			}
 			
-			$tmpFile = "documento_ejemplo";
-			$extension = "pdf";
-			$ruta = "/var/www/html/archivo/tmp";
+			// $tmpFile = "documento_ejemplo.pdf";
+			$ruta = base_path("docs");
     
             $img = new Imagick();
             $img->setResolution(300, 300);
-            $img->readImage("$ruta/$tmpFile.$extension");  //Open after yuo set resolution.
+            $img->readImage("$ruta/$tmpFile");  //Open after yuo set resolution.
             $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
             $img->setImageUnits(imagick::RESOLUTION_PIXELSPERINCH); //Declare the units for resolution.
             $img->setImageCompression(imagick::COMPRESSION_JPEG);
@@ -37,7 +58,9 @@ class OcrController extends Controller
             $img->clear();
             $img->destroy();
     
-            //@unlink("$ruta/$tmpFile.$extension"); //eliminamos el documento pdf
+            //borramos el archivo temporal
+            Storage::disk("archivosLocal")->delete($tmpFile);
+
             $array_res = [];
             $text_res = "";
             $response = null;
