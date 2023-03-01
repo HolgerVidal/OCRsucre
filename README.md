@@ -62,3 +62,12 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+
+## API
+POST -> [http://127.0.0.1:8000/api/obtener-texto-pdf](http://127.0.0.1:8000/api/obtener-texto-pdf)
+
+#### PARAMETROS
+- origen = "EXTERNO" o "TRAMITES"
+- ruta_documento = "carpeta/nombre_documento.pdf" o "nombre_documento.pdf"
+- paginate = "true" o "false"
