@@ -66,3 +66,7 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 
 ## API
 [http://127.0.0.1:8000/api/obtener-texto-pdf](http://127.0.0.1:8000/api/obtener-texto-pdf)
+POST
+- origen
+- ruta_documento
+- paginate
