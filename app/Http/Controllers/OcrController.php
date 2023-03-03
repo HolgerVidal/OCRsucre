@@ -107,6 +107,9 @@ class OcrController extends Controller
 
 		try{
 			
+            set_time_limit(0);
+            ini_set('memory_limit','-1');
+
             //obigen del documentos
             //TRAMITES = el cliente tiene que guardar el documento en 'Docs' y solo recivimos el nombre | finalmente nosotros lo borramos
             //EXTERNO = el cliente soli envia el nombre, nosotros tenemos que sacar el documento del servidor de archivos
