@@ -23,6 +23,7 @@ class OcrController extends Controller
 
             $origen = $request->origen;
             $ruta_documento = $request->ruta_documento;
+            $tmpFileCompleto = "";
 
             if($origen == "EXTERNO"){
                 //obtenemos solo el nombre del documento
@@ -33,9 +34,9 @@ class OcrController extends Controller
                 // Guardar el archivo en el disco destino
                 Storage::disk("archivosLocal")->put($nombre_doc, $descargado);
 
-                $tmpFile = $nombre_doc;
+                $tmpFileCompleto = $nombre_doc;
             }else{
-                $tmpFile = $ruta_documento;
+                $tmpFileCompleto = $ruta_documento;
             }
 
 			$tiempo_inicial = microtime(true);
@@ -46,12 +47,13 @@ class OcrController extends Controller
 				}
 			}
 			
-			// $tmpFile = "documento_ejemplo.pdf";
+            $extension = pathinfo($tmpFileCompleto, PATHINFO_EXTENSION);
+			$tmpFile = pathinfo($tmpFileCompleto, PATHINFO_FILENAME);
 			$ruta = base_path("docs");
     
             $img = new Imagick();
             $img->setResolution(300, 300);
-            $img->readImage("$ruta/$tmpFile");  //Open after yuo set resolution.
+            $img->readImage("$ruta/$tmpFile.$extension");  //Open after yuo set resolution.
             $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
             $img->setImageUnits(imagick::RESOLUTION_PIXELSPERINCH); //Declare the units for resolution.
             $img->setImageCompression(imagick::COMPRESSION_JPEG);
@@ -62,7 +64,7 @@ class OcrController extends Controller
             $img->destroy();
     
             //borramos el archivo temporal
-            Storage::disk("archivosLocal")->delete($tmpFile);
+            Storage::disk("archivosLocal")->delete($tmpFile.".".$extension);
 
             $array_res = [];
             $text_res = "";
@@ -119,6 +121,7 @@ class OcrController extends Controller
 
             $origen = $request->origen;
             $ruta_documento = $request->ruta_documento;
+            $tmpFileCompleto = "";
 
             if($origen == "EXTERNO"){
                 //obtenemos solo el nombre del documento
@@ -129,9 +132,9 @@ class OcrController extends Controller
                 // Guardar el archivo en el disco destino
                 Storage::disk("archivosLocal")->put($nombre_doc, $descargado);
 
-                $tmpFile = $nombre_doc;
+                $tmpFileCompleto = $nombre_doc;
             }else{
-                $tmpFile = $ruta_documento;
+                $tmpFileCompleto = $ruta_documento;
             }
 
 			$tiempo_inicial = microtime(true);
@@ -142,34 +145,32 @@ class OcrController extends Controller
 				}
 			}
 			
-			// $tmpFile = "documento_ejemplo.pdf";
+            $extension = pathinfo($tmpFileCompleto, PATHINFO_EXTENSION); //solo la extension del documento
+			$tmpFile = pathinfo($tmpFileCompleto, PATHINFO_FILENAME); //solo el nombre del documento
 			$ruta = base_path("docs");
-
+    
             $img = new Imagick();
             $img->setResolution(300, 300);
-            $img->readImage("$ruta/$tmpFile");  //Open after yuo set resolution.
+            $img->readImage("$ruta/$tmpFile.$extension");  //Open after yuo set resolution.
             $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
             $img->setImageUnits(imagick::RESOLUTION_PIXELSPERINCH); //Declare the units for resolution.
             $img->setImageCompression(imagick::COMPRESSION_JPEG);
-            $img->setImageCompressionQuality(20);
+            $img->setImageCompressionQuality(10);
             $img->setImageFormat('jpeg');
             $img->writeImages("$ruta/$tmpFile.jpg", false);
             $img->clear();
             $img->destroy();
     
             //borramos el archivo temporal
-            Storage::disk("archivosLocal")->delete($tmpFile);
+            Storage::disk("archivosLocal")->delete($tmpFile.".".$extension);
 
             $array_res = [];
-            $text_res = "";
-            $response = null;
             for($x=0; $x<$num_paginas; $x++){
                 $name="";
                 if($num_paginas>1){$name="-$x";}
-                array_push($array_res, $tmpFile.$name);
-
+                array_push($array_res, "$tmpFile$name.jpg");
             }
-                        
+            
             //calculamos el tiempo de ejecucion
             $tiempo_final = microtime(true);
             $tiempo = $tiempo_final - $tiempo_inicial;
@@ -180,7 +181,7 @@ class OcrController extends Controller
                 "tiempo"=>$tiempo,
                 "tiempounidad"=>"segundos",
                 "numpaginas"=>$num_paginas,
-                "lista_img"=>$array_res
+                "response"=>$array_res
             ]);
           
         }catch(\Throwable $th){
