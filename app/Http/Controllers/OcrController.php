@@ -216,7 +216,7 @@ class OcrController extends Controller
 
             $text_res = "";
   
-            $cmd = "tesseract $ruta/$tmpFile.$extension $ruta/$tmpFile";dd($cmd);
+            $cmd = "tesseract $ruta/$tmpFile.$extension $ruta/$tmpFile";
             exec($cmd, $salida, $err);
             $res = file_get_contents("$ruta/$tmpFile.txt");
             @unlink("$ruta/$tmpFile.$extension");
