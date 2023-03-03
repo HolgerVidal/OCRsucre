@@ -216,13 +216,15 @@ class OcrController extends Controller
 
             $text_res = "";
   
-            $cmd = "tesseract $ruta/$tmpFile.$extension $ruta/$tmpFile";
-            exec($cmd, $salida, $err);
-            $res = file_get_contents("$ruta/$tmpFile.txt");
-            @unlink("$ruta/$tmpFile.$extension");
-            @unlink("$ruta/$tmpFile.txt");
-            $res=preg_replace("/[\r\n|\n|\r]+/"," ", $res);
-            $text_res = $res; #si no se quiere paginar
+            for ($i=0; $i < 2; $i++) { 
+                $cmd = "tesseract $ruta/$tmpFile.$extension $ruta/$tmpFile";
+                exec($cmd, $salida, $err);
+                $res = file_get_contents("$ruta/$tmpFile.txt");
+                @unlink("$ruta/$tmpFile.$extension");
+                @unlink("$ruta/$tmpFile.txt");
+                $res=preg_replace("/[\r\n|\n|\r]+/"," ", $res);
+                $text_res = $res; #si no se quiere paginar
+            }
 
             
             //calculamos el tiempo de ejecucion
