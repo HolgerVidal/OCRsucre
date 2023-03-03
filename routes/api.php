@@ -22,4 +22,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::middleware([ApiTokenMiddleware::class])->group(function () {
     Route::post("obtener-texto-pdf", [OcrController::class, "obtener_texto_pdf"]);
+
+    Route::post("crear-img", [OcrController::class, "crear_img"]);
+    Route::post("obtener-texto-img", [OcrController::class, "obtener_texto_img"]);
 });
