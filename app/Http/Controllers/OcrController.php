@@ -145,7 +145,7 @@ class OcrController extends Controller
             $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
             $img->setImageUnits(imagick::RESOLUTION_PIXELSPERINCH); //Declare the units for resolution.
             $img->setImageCompression(imagick::COMPRESSION_JPEG);
-            $img->setImageCompressionQuality(10);
+            $img->setImageCompressionQuality(20);
             $img->setImageFormat('jpeg');
             $img->writeImages("$ruta/$tmpFile.jpg", false);
             $img->clear();
