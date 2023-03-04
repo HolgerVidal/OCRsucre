@@ -105,7 +105,10 @@ class OcrController extends Controller
             // header("Content-Type: application/json; charset=UTF-8");
             $msg_error = __CLASS__." => ".__FUNCTION__." => Mensaje => ".$th->getMessage()." => en la linea: ".$th->getLine();
             Log::error($msg_error);
-            dd($msg_error);
+            return response([
+                "error"=>true,
+                "msg_error"=>$msg_error
+            ]);
         }
 
     }
@@ -194,7 +197,10 @@ class OcrController extends Controller
             // header("Content-Type: application/json; charset=UTF-8");
             $msg_error = __CLASS__." => ".__FUNCTION__." => Mensaje => ".$th->getMessage()." => en la linea: ".$th->getLine();
             Log::error($msg_error);
-            dd($msg_error);
+            return response([
+                "error"=>true,
+                "msg_error"=>$msg_error
+            ]);
         }
 
     }
@@ -248,7 +254,10 @@ class OcrController extends Controller
             // header("Content-Type: application/json; charset=UTF-8");
             $msg_error = __CLASS__." => ".__FUNCTION__." => Mensaje => ".$th->getMessage()." => en la linea: ".$th->getLine();
             Log::error($msg_error);
-            dd($msg_error);
+            return response([
+                "error"=>true,
+                "msg_error"=>$msg_error
+            ]);
         }
 
     }
