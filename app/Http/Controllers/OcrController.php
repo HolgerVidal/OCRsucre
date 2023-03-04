@@ -36,7 +36,10 @@ class OcrController extends Controller
 
                 $tmpFileCompleto = $nombre_doc;
             }else{
-                $tmpFileCompleto = $ruta_documento;
+                $nombre_doc = strrpos($ruta_documento, '/');
+                if(!is_numeric($nombre_doc)){ $nombre_doc = -1; }
+                $nombre_doc = substr($ruta_documento, $nombre_doc+1);
+                $tmpFileCompleto = $nombre_doc;
             }
 
 			$tiempo_inicial = microtime(true);
@@ -134,7 +137,10 @@ class OcrController extends Controller
 
                 $tmpFileCompleto = $nombre_doc;
             }else{
-                $tmpFileCompleto = $ruta_documento;
+                $nombre_doc = strrpos($ruta_documento, '/');
+                if(!is_numeric($nombre_doc)){ $nombre_doc = -1; }
+                $nombre_doc = substr($ruta_documento, $nombre_doc+1);
+                $tmpFileCompleto = $nombre_doc;
             }
 
 			$tiempo_inicial = microtime(true);
