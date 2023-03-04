@@ -228,7 +228,7 @@ class OcrController extends Controller
             @unlink("$ruta/$tmpFile.$extension");
             @unlink("$ruta/$tmpFile.txt");
             $res = preg_replace("/[\r\n|\n|\r]+/"," ", $res);
-            $res = preg_replace('/[^\w\s]/u', '', $res);
+            $res = preg_replace('/[^\w\s\x0C]/u', '', $res);
             $res = trim($res);
             $text_res = $res; #si no se quiere paginar
             
