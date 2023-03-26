@@ -25,4 +25,6 @@ Route::middleware([ApiTokenMiddleware::class])->group(function () {
 
     Route::post("crear-img", [OcrController::class, "crear_img"]);
     Route::post("obtener-texto-img", [OcrController::class, "obtener_texto_img"]);
+
+    Route::post("contar-hojas-pdf", [OcrController::class, "contar_hojas_pdf"]);
 });

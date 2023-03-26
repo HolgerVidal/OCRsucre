@@ -263,4 +263,58 @@ class OcrController extends Controller
 
     }
 
+    public function contar_hojas_pdf(Request $request){
+        
+        try {
+
+            set_time_limit(0);
+            ini_set('memory_limit','-1');
+
+            $ruta_documento = $request->ruta_documento;
+            $tmpFileCompleto = "";
+
+            $nombre_doc = strrpos($ruta_documento, '/');
+            if(!is_numeric($nombre_doc)){ $nombre_doc = -1; }
+            $nombre_doc = substr($ruta_documento, $nombre_doc+1);
+            $tmpFileCompleto = $nombre_doc;
+
+			$tiempo_inicial = microtime(true);
+			
+            $extension = pathinfo($tmpFileCompleto, PATHINFO_EXTENSION);
+			$tmpFile = pathinfo($tmpFileCompleto, PATHINFO_FILENAME);
+			$ruta = base_path("docs");
+    
+            $img = new Imagick();
+            $img->setResolution(300, 300);
+            $img->readImage("$ruta/$tmpFile.$extension");  //Open after yuo set resolution.
+            $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
+            $img->clear();
+            $img->destroy();
+            
+            //calculamos el tiempo de ejecucion
+            $tiempo_final = microtime(true);
+            $tiempo = $tiempo_final - $tiempo_inicial;
+            $tiempo = round($tiempo, 2);
+            
+            return response([
+                "error"=>false,
+                "tiempo"=>$tiempo,
+                "tiempounidad"=>"segundos",
+                "numpaginas"=>$num_paginas
+            ]);
+            
+        } catch (\Throwable $th) {
+            
+            // header("Content-Type: application/json; charset=UTF-8");
+            $msg_error = __CLASS__." => ".__FUNCTION__." => Mensaje => ".$th->getMessage()." => en la linea: ".$th->getLine();
+            Log::error($msg_error);
+            return response([
+                "error"=>true,
+                "msg_error"=>$msg_error
+            ]);
+
+        }
+
+    }
+
 }
