@@ -285,11 +285,11 @@ class OcrController extends Controller
 			$ruta = base_path("docs");
     
             $img = new Imagick();
-            $img->setResolution(300, 300);
             $img->readImage("$ruta/$tmpFile.$extension");  //Open after yuo set resolution.
             $num_paginas = $img->getNumberImages(); //obtenemos el numero de paginas para iterar
-            $img->clear();
-            $img->destroy();
+
+            //borramos el archivo temporal
+            Storage::disk("archivosLocal")->delete($tmpFile.".".$extension);
             
             //calculamos el tiempo de ejecucion
             $tiempo_final = microtime(true);
