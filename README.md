@@ -9,4 +9,4 @@ POST -> [http://127.0.0.1:8000/api/obtener-texto-pdf](http://127.0.0.1:8000/api/
 - paginate = "true" o "false"
 
 ## REQUISITO
-- tesseract-ocr
+- Instalar la libreria tesseract-ocr en el servidor
